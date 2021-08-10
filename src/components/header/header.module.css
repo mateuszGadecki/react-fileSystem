@@ -1,0 +1,30 @@
+.header {
+  background: #535c68;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.header__logo {
+  text-decoration: none;
+  color: #dff9fb;
+  font-size: 3.2rem;
+}
+
+.header__nav {
+  display: flex;
+}
+
+.header__navItem {
+  text-decoration: none;
+  color: #dff9fb;
+  font-size: 1.8rem;
+  margin-left: 40px;
+}
+
+.active {
+  border-bottom: 1px solid #dff9fb;
+}
