@@ -49,19 +49,23 @@ const Explorer = ({ fileTree }): JSX.Element => {
   };
 
   const goBackHandler = () => {
-    dispatch(updateForwardView(filesState.currentView));
-    filesState.historyView.length > 1
-      ? dispatch(updateCurrentView(filesState.historyView[filesState.historyView.length - 1]))
-      : dispatch(updateCurrentView(filesState.historyView[0]));
-    dispatch(deleteLastHistoryItem());
+    if (filesState.historyView.length > 0) {
+      dispatch(updateForwardView(filesState.currentView));
+      filesState.historyView.length > 1
+        ? dispatch(updateCurrentView(filesState.historyView[filesState.historyView.length - 1]))
+        : dispatch(updateCurrentView(filesState.historyView[0]));
+      dispatch(deleteLastHistoryItem());
+    }
   };
 
   const goForwardHandler = () => {
-    dispatch(updateHistoryView(filesState.currentView));
-    filesState.forwardView.length > 1
-      ? dispatch(updateCurrentView(filesState.forwardView[filesState.forwardView.length - 1]))
-      : dispatch(updateCurrentView(filesState.forwardView[0]));
-    dispatch(deleteLastForwardItem());
+    if (filesState.forwardView.length > 0) {
+      dispatch(updateHistoryView(filesState.currentView));
+      filesState.forwardView.length > 1
+        ? dispatch(updateCurrentView(filesState.forwardView[filesState.forwardView.length - 1]))
+        : dispatch(updateCurrentView(filesState.forwardView[0]));
+      dispatch(deleteLastForwardItem());
+    }
   };
 
   return (
