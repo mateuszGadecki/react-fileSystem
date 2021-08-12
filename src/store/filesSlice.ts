@@ -10,6 +10,7 @@ const initialState = {
   folderStructure: [],
   folderStructureWithFiles: [],
   currentView: [],
+  historyView: [],
   loading: false,
 };
 
@@ -148,6 +149,12 @@ const filesSlice = createSlice({
     updateCurrentView(state, { payload }) {
       state.currentView = payload;
     },
+    updateHistoryView(state, { payload }) {
+      state.historyView.push(payload);
+    },
+    deleteLastHistoryItem(state) {
+      state.historyView.pop();
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getFiles.pending, (state) => {
@@ -163,6 +170,6 @@ const filesSlice = createSlice({
   },
 });
 
-export const { updateCurrentView } = filesSlice.actions;
+export const { updateCurrentView, updateHistoryView, deleteLastHistoryItem } = filesSlice.actions;
 
 export default filesSlice.reducer;

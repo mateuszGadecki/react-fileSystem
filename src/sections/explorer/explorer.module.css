@@ -30,4 +30,10 @@
 .explorer__arrow {
   width: 40px;
   height: 40px;
+  cursor: not-allowed;
+}
+.explorer__arrowActive {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }

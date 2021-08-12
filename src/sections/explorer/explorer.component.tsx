@@ -1,3 +1,7 @@
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectFiles } from '../../store/store';
+import { updateCurrentView, deleteLastHistoryItem } from '../../store/filesSlice';
 import Folder from '../../components/folder/folder.component';
 import File from '../../components/file/file.component';
 import BackArrow from '../../images/backArrow.svg';
@@ -5,6 +9,14 @@ import ForwardArrow from '../../images/forwardArrow.svg';
 import classes from './explorer.module.css';
 
 const Explorer = ({ fileTree }): JSX.Element => {
+  const [activeBackArrow, setActiveBackArrow] = useState(false);
+  const dispatch = useDispatch();
+  const filesState = useSelector(selectFiles);
+
+  useEffect(() => {
+    filesState.historyView.length > 0 ? setActiveBackArrow(true) : setActiveBackArrow(false);
+  }, [filesState.historyView.length]);
+
   const renderFolders = () => {
     if (fileTree.folders) {
       return fileTree.folders.map((el) => (
@@ -28,12 +40,26 @@ const Explorer = ({ fileTree }): JSX.Element => {
     }
   };
 
+  const goBackHandler = () => {
+    console.log(filesState.historyView[0]);
+
+    filesState.historyView.length > 1
+      ? dispatch(updateCurrentView(filesState.historyView[filesState.historyView.length - 1]))
+      : dispatch(updateCurrentView(filesState.historyView[0]));
+    console.log(filesState.historyView.length);
+    filesState.historyView.length ? 1 && dispatch(deleteLastHistoryItem()) : dispatch(updateCurrentView([]));
+  };
+
   return (
     <div className={classes.explorer}>
       <div className={classes.explorer__nav}>
         <div className={classes.explorer__navArrows}>
-          <div>
-            <img className={classes.explorer__arrow} src={BackArrow} alt="backArrowIcon" />
+          <div onClick={goBackHandler}>
+            <img
+              className={activeBackArrow ? classes.explorer__arrowActive : classes.explorer__arrow}
+              src={BackArrow}
+              alt="backArrowIcon"
+            />
           </div>
           <div>
             <img className={classes.explorer__arrow} src={ForwardArrow} alt="backArrowIcon" />

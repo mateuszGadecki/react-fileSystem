@@ -1,10 +1,12 @@
 import classes from './folder.module.css';
-import { useDispatch } from 'react-redux';
-import { updateCurrentView } from '../../store/filesSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectFiles } from '../../store/store';
+import { updateCurrentView, updateHistoryView } from '../../store/filesSlice';
 import FolderIcon from '../../images/folderIcon.png';
 
 const Folder = ({ folderName, files, folders }): JSX.Element => {
   const dispatch = useDispatch();
+  const filesState = useSelector(selectFiles);
 
   const currentView = {
     folderName: folderName,
@@ -12,6 +14,7 @@ const Folder = ({ folderName, files, folders }): JSX.Element => {
     folders: folders,
   };
   const updateViewHandler = () => {
+    dispatch(updateHistoryView(filesState.currentView));
     dispatch(updateCurrentView(currentView));
   };
   return (
