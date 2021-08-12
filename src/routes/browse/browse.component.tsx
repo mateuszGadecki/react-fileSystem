@@ -12,7 +12,7 @@ const BrowseRoute = (): JSX.Element => {
   const files = useSelector(selectFiles);
   useEffect(() => {
     dispatch(getFiles());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Layout>
