@@ -16,9 +16,7 @@ const BrowseRoute = (): JSX.Element => {
 
   return (
     <Layout>
-      <div className={classes.browse}>
-        {files.loading ? <Loader /> : <Explorer fileTree={files.folderStructureWithFiles} />}
-      </div>
+      <div className={classes.browse}>{files.loading ? <Loader /> : <Explorer fileTree={files.currentView} />}</div>
     </Layout>
   );
 };

@@ -9,6 +9,7 @@ const initialState = {
   uniquePaths: [],
   folderStructure: [],
   folderStructureWithFiles: [],
+  currentView: [],
   loading: false,
 };
 
@@ -141,7 +142,11 @@ const filesSlice = createSlice({
         }
       });
       state.folderStructureWithFiles = folderStructure;
+      state.currentView = folderStructure;
       state.loading = false;
+    },
+    updateCurrentView(state, { payload }) {
+      state.currentView = payload;
     },
   },
   extraReducers: (builder) => {
@@ -157,5 +162,7 @@ const filesSlice = createSlice({
     });
   },
 });
+
+export const { updateCurrentView } = filesSlice.actions;
 
 export default filesSlice.reducer;
