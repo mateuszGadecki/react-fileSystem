@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFiles } from '../../store/store';
-import { updateCurrentView, deleteLastHistoryItem } from '../../store/filesSlice';
+import {
+  updateCurrentView,
+  deleteLastHistoryItem,
+  updateForwardView,
+  deleteLastForwardItem,
+  updateHistoryView,
+} from '../../store/filesSlice';
 import Folder from '../../components/folder/folder.component';
 import File from '../../components/file/file.component';
 import BackArrow from '../../images/backArrow.svg';
@@ -10,12 +16,14 @@ import classes from './explorer.module.css';
 
 const Explorer = ({ fileTree }): JSX.Element => {
   const [activeBackArrow, setActiveBackArrow] = useState(false);
+  const [activeForwardArrow, setActiveForwardArrow] = useState(false);
   const dispatch = useDispatch();
   const filesState = useSelector(selectFiles);
 
   useEffect(() => {
     filesState.historyView.length > 0 ? setActiveBackArrow(true) : setActiveBackArrow(false);
-  }, [filesState.historyView.length]);
+    filesState.forwardView.length > 0 ? setActiveForwardArrow(true) : setActiveForwardArrow(false);
+  }, [filesState.historyView.length, filesState.forwardView.length]);
 
   const renderFolders = () => {
     if (fileTree.folders) {
@@ -41,13 +49,19 @@ const Explorer = ({ fileTree }): JSX.Element => {
   };
 
   const goBackHandler = () => {
-    console.log(filesState.historyView[0]);
-
+    dispatch(updateForwardView(filesState.currentView));
     filesState.historyView.length > 1
       ? dispatch(updateCurrentView(filesState.historyView[filesState.historyView.length - 1]))
       : dispatch(updateCurrentView(filesState.historyView[0]));
-    console.log(filesState.historyView.length);
-    filesState.historyView.length ? 1 && dispatch(deleteLastHistoryItem()) : dispatch(updateCurrentView([]));
+    dispatch(deleteLastHistoryItem());
+  };
+
+  const goForwardHandler = () => {
+    dispatch(updateHistoryView(filesState.currentView));
+    filesState.forwardView.length > 1
+      ? dispatch(updateCurrentView(filesState.forwardView[filesState.forwardView.length - 1]))
+      : dispatch(updateCurrentView(filesState.forwardView[0]));
+    dispatch(deleteLastForwardItem());
   };
 
   return (
@@ -61,8 +75,12 @@ const Explorer = ({ fileTree }): JSX.Element => {
               alt="backArrowIcon"
             />
           </div>
-          <div>
-            <img className={classes.explorer__arrow} src={ForwardArrow} alt="backArrowIcon" />
+          <div onClick={goForwardHandler}>
+            <img
+              className={activeForwardArrow ? classes.explorer__arrowActive : classes.explorer__arrow}
+              src={ForwardArrow}
+              alt="backArrowIcon"
+            />
           </div>
         </div>
       </div>
